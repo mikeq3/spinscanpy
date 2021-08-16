@@ -76,7 +76,7 @@ class ScanApp(wx.App):
 class ctrlPanel(wx.Panel):
 	def __init__(self, parent):
 		wx.Panel.__init__(self, parent)
-		self.parent = parent
+  		self.parent = parent
 		
 		self.Recording = False
 
@@ -87,7 +87,7 @@ class ctrlPanel(wx.Panel):
                             (200,-1), comList, wx.CB_DROPDOWN)
 		ttycombo.SetToolTip(wx.ToolTip("select serial port of arduino from dropdown-list"))
 		camList = self.parent.camList()
-		camcombo = wx.ComboBox(self, wx.ID_ANY, 'Camera', wx.DefaultPosition,
+        	camcombo = wx.ComboBox(self, wx.ID_ANY, 'Camera', wx.DefaultPosition,
                             (200,-1), camList, wx.CB_DROPDOWN)
 		camcombo.SetToolTip(wx.ToolTip("select camera device from dropdown-list"))
 		self.cbll = wx.CheckBox(self, -1, 'Laser Left')
@@ -102,7 +102,7 @@ class ctrlPanel(wx.Panel):
 		self.procButton = wx.Button(self, -1, '&Process Scans')
 		self.procButton.SetToolTipString("This is to analyze a scan file!")
 		self.cbpcapp = wx.CheckBox(self, -1, '&Combine with Previous Cloud')
-		self.rbl = wx.RadioButton(self, -1, 'Left Scan', style=wx.RB_GROUP)
+         	self.rbl = wx.RadioButton(self, -1, 'Left Scan', style=wx.RB_GROUP)
 		self.rbr = wx.RadioButton(self, -1, 'Right Scan')
 		self.stpprocButton = wx.Button(self, -1, '&Abort Processing')
 		self.progText = wx.StaticText(self, -1, 'Progress:')
@@ -129,7 +129,7 @@ class ctrlPanel(wx.Panel):
 
 		self.sizer = wx.GridBagSizer()
 		self.sizer.Add(ttycombo, pos=(0,0),  span=(1, 2),flag=wx.ALL, border=5)
-		self.sizer.Add(camcombo, pos=(1,0),  span=(1, 2),flag=wx.ALL, border=5)
+        	self.sizer.Add(camcombo, pos=(1,0),  span=(1, 2),flag=wx.ALL, border=5)
 		self.sizer.Add(self.cbll, pos=(2,0), flag=wx.ALL, border=5)
 		self.sizer.Add(self.cblr, pos=(2,1), flag=wx.ALL, border=5)
 		self.sizer.Add(self.textureButton, pos=(3,0), flag=wx.ALL, border=5)
@@ -167,12 +167,12 @@ class mainWindow(wx.Frame):
 
 		#self.SetBackgroundColour('#000000')
 
-		self.playTimer = wx.Timer(self, self.TIMER_PLAY_ID)
-		wx.EVT_TIMER(self, self.TIMER_PLAY_ID, self.onTimer)
+        	self.playTimer = wx.Timer(self, self.TIMER_PLAY_ID)
+        	wx.EVT_TIMER(self, self.TIMER_PLAY_ID, self.onTimer)
 
 		self.playTimer.Start(1000/15) #assuming 15 fps
 
-		self.Bind(wx.EVT_PAINT, self.onPaint)
+      		self.Bind(wx.EVT_PAINT, self.onPaint)
 
 		self.normalModeOnlyItems = []
 		self.menubar = wx.MenuBar()
@@ -246,7 +246,7 @@ class mainWindow(wx.Frame):
 		self.cfgValues = [self.fileprefix,str(camHFOV),str(camVFOV),str(camDistance),str(laserOffset),str(self.threshold)]
 		self.Img = ""
 		self.frameSkip = 1
-		self.Layout()
+       		self.Layout()
 		self.Show(True)
 		self.ctrpnl.stpprocButton.Show(False)
 		self.ctrpnl.absButton.Show(False)
@@ -269,7 +269,7 @@ class mainWindow(wx.Frame):
 
 	def _showModelLoadDialog(self, amount):
 		filelist = []
-		for i in range(0, amount):
+		for i in xrange(0, amount):
 			filelist.append(self._showOpenDialog("Select file to process"))
 			if filelist[-1] == False:
 				return False
@@ -286,39 +286,39 @@ class mainWindow(wx.Frame):
 		if saveFileDialog.ShowModal() == wx.ID_CANCEL:
 			return  False   # the user changed idea..
 		laserFile += saveFileDialog.GetPath()
-		print (laserFile)
+		print laserFile
 
 	def OnAbout(self,e):
-		# A message dialog box with an OK button. wx.OK is a standard ID in wxWidgets.
-		dlg = wx.MessageDialog( self, "Spinscan in Python\nVersion " + version + "\nWritten by\nMike Queally", "About Spinscan", wx.OK)
-		dlg.ShowModal() # Show it
-		dlg.Destroy() # finally destroy it when finished.
+           	# A message dialog box with an OK button. wx.OK is a standard ID in wxWidgets.
+           	dlg = wx.MessageDialog( self, "Spinscan in Python\nVersion " + version + "\nWritten by\nMike Queally", "About Spinscan", wx.OK)
+          	dlg.ShowModal() # Show it
+         	dlg.Destroy() # finally destroy it when finished.
 
 	def InitCam(self):
 		if (self.CamConnect == False) and (self.Camera != "None"):
-			self.capture = cv.CaptureFromCAM(int(self.Camera[-1:]))
+        		self.capture = cv.CaptureFromCAM(int(self.Camera[-1:]))
 			cv.VideoCapture.set(self.capture, cv.CAP_PROP_FRAME_WIDTH, 640)
 			cv.VideoCapture.set(self.capture, cv2.CAP_PROP_FRAME_HEIGHT, 480)
 			cv.VideoCapture.set(self.capture, cv.CAP_PROP_BRIGHTNESS, self.brightness)
 			cv.VideoCapture.set(self.capture, cv.CAP_PROP_CONTRAST, self.contrast)
-			self.capImg = cv.QueryFrame(self.capture)
+        		self.capImg = cv.QueryFrame(self.capture)
 			self.cv2arr = cv2array()
-			self.CamConnect = True
+ 			self.CamConnect = True
 			self.Refresh()
 
 	def InitSerial(self):
-		print ("serial port open " + self.ttyPort + "\n")
+		print "serial port open " + self.ttyPort + "\n"
 		cfg = self.sercfg.getcfg()
 		self.serial = serial.Serial(port=self.ttyPort, baudrate=cfg[0], bytesize=cfg[1], parity=cfg[2], stopbits=cfg[3])
 		self.serialConnected = True
 		self.comTimer = wx.Timer(self, self.TIMER_SERIAL_ID)
-		wx.EVT_TIMER(self, self.TIMER_SERIAL_ID, self.serialThread)
+        	wx.EVT_TIMER(self, self.TIMER_SERIAL_ID, self.serialThread)
 		self.comTimer.Start(1000/20)
 		return
 
-	def onPaint(self, evt):
+    	def onPaint(self, evt):
 		if (self.CamConnect and self.Preview):
-			if (self.capImg != None):
+        		if (self.capImg != None):
 				imgArr = self.cv2arr.getarray(self.capImg)
 				idepth = self.cv2arr.getdepth()
 				iformat = self.cv2arr.getformat()
@@ -326,20 +326,20 @@ class mainWindow(wx.Frame):
 
 		if (self.textureScanLoaded):
 			self.textureDC = wx.AutoBufferedPaintDC(self.texturepanel)
-			self.textureDC.DrawBitmap(self.textureImage, 0, 0)
+        		self.textureDC.DrawBitmap(self.textureImage, 0, 0)
 
 		if (self.laserScanLoaded):
 			self.laserDC = wx.AutoBufferedPaintDC(self.laserpanel)
-			self.laserDC.DrawBitmap(self.laserImage, 0, 0)
+        		self.laserDC.DrawBitmap(self.laserImage, 0, 0)
 
-	def onTimer(self, evt):
+    	def onTimer(self, evt):
 		if (self.CamConnect and self.Preview and not self.Processing):        	
 			self.capImg = cv.QueryFrame(self.capture)
-			if self.capImg:
-				if self.Recording:
-					cv.WriteFrame(self.writer, self.capImg)
+        		if self.capImg:
+		   		if self.Recording:
+		   			cv.WriteFrame(self.writer, self.capImg)
 					return
-				else:
+		   		else:
 					imgArr = self.cv2arr.getarray(self.capImg)
 					idepth = self.cv2arr.getdepth()
 					iformat = self.cv2arr.getformat()
@@ -347,116 +347,116 @@ class mainWindow(wx.Frame):
 					wx.Yield()
 
 		elif (self.Processing):
-			if (self.laserScanLoaded):
-				if (self.laserMovie.done()):
-					print ("Writing ply file..\n")
-					self.ctrpnl.progText2.SetLabel('Writing ply file')
-					self.sb.SetStatusText('Writing ply file..')
-					wx.Yield()
-					if (len(self.fileprefix) > 0):
-						plydata = self.fileprefix + '-' + plyFilename
-					else:
-						plydata = plyFilename
-					plydata = outputFolder + plydata
-					self.plyFile = createWriter(plydata)
-					self.plyFile.setMode('w')
-					self.plyFile.openf()
-					self.plyFile.write("ply\n")
-					self.plyFile.write("format ascii 1.0\n")
-					self.plyFile.write("comment Made with spinscanpy!\n")
-					self.plyFile.write("element vertex " + str(len(self.pointList)) + "\n")
-					self.plyFile.write("property float x\n")
-					self.plyFile.write("property float y\n")
-					self.plyFile.write("property float z\n")
-					#self.plyFile.write("property float nx\n")
-					#self.plyFile.write("property float ny\n")
-					#self.plyFile.write("property float nz\n")
-					if (self.textureScanLoaded):
-						self.plyFile.write("property uchar red\n")
-						self.plyFile.write("property uchar green\n")
-						self.plyFile.write("property uchar blue\n")
-					self.plyFile.write("element face 0\n")
-					self.plyFile.write("property list uchar int vertex_indices\n")
-					self.plyFile.write("end_header\n")
-					# add points here
-					for x in range (0, len(self.pointList)):
-						Point = self.pointList[x]
-						#Normal = self.normalList[x]
-						if (self.textureScanLoaded):
-							ColorPoint = self.colorList[x]
-							self.plyFile.write(str(Point[0]) + " " + str(Point[1]) + " " + str(Point[2]) + " " + str(ColorPoint[0]) + " " + str(ColorPoint[1]) + " " + str(ColorPoint[2]) + "\n")
-						else:
-							self.plyFile.write(str(Point[0]) + " " + str(Point[1]) + " " + str(Point[2]) + "\n")
-
-						#self.plyFile.write(str(Point[0]) + " " + str(Point[1]) + " " + str(Point[2]) + " " + str(Normal[0]) + " " + str(Normal[1]) + " " + str(Normal[2]) + " " + str(ColorPoint[0]) + " " + str(ColorPoint[1]) + " " + str(ColorPoint[2]) + "\n")
-
-					self.plyFile.close()
-
-					print ("Writing pcloud file..\n")
-					self.sb.SetStatusText('Writing pcloud file..')
-					self.ctrpnl.progText2.SetLabel('Writing pcloud file')
-					if (len(self.fileprefix) > 0):
-						pclouddata = self.fileprefix + '-' + pcloudFilename
-					else:
-						pclouddata = pcloudFilename
-					pclouddata = outputFolder + pclouddata
-					self.pcloudFile = createWriter(pclouddata)
-					self.pcloudFile.setMode('w')
-					self.pcloudFile.openf()
-					self.pcloudFile.write("[\n")
-
-					# add points here
-					for i in range (0, len(self.cloudList)):
-							self.pcloudFile.write("\t[\n")
-							Cloud = self.cloudList[i]
-							for s in range (0, len(Cloud)):
-								CloudPoint = Cloud[s]
-								self.pcloudFile.write("\t\t[" + str(CloudPoint[0]) + "," + str(CloudPoint[1]) + "," + str(CloudPoint[2]) + "," + str(CloudPoint[3]) + "," + str(CloudPoint[4]) + "," + str(CloudPoint[5]) + "]")
-								if (s + 1 == len(Cloud)):
-									self.pcloudFile.write("\n")
-								else:
-									self.pcloudFile.write(",\n")
-			
-							self.pcloudFile.write("\t]")
-							if (i + 1 == len(self.cloudList)):
-								self.pcloudFile.write("\n")
-							else:
-								self.pcloudFile.write(",\n")
-
-					self.pcloudFile.write("]\n")
-					self.pcloudFile.close()
-					print ("Finished!\n")
-					self.sb.SetStatusText('Finished!')
-					self.ctrpnl.progText2.SetLabel('')
-					self.ctrpnl.stpprocButton.Show(False)
-					self.ctrpnl.procButton.Show(True)
-					self.ctrpnl.rbl.Show(False)
-					self.ctrpnl.rbr.Show(False)
-					self.Processing = False
+		    if (self.laserScanLoaded):
+			if (self.laserMovie.done()):
+				print "Writing ply file..\n"
+				self.ctrpnl.progText2.SetLabel('Writing ply file')
+				self.sb.SetStatusText('Writing ply file..')
+				wx.Yield()
+				if (len(self.fileprefix) > 0):
+					plydata = self.fileprefix + '-' + plyFilename
 				else:
-					self.processScanFrame()
-					if (self.sSide == 1.0):
-						self.preview3d.glCanvas.rotOneLine(-360.0/self.numframes)
+					plydata = plyFilename
+				plydata = outputFolder + plydata
+				self.plyFile = createWriter(plydata)
+				self.plyFile.setMode('w')
+				self.plyFile.openf()
+				self.plyFile.write("ply\n")
+				self.plyFile.write("format ascii 1.0\n")
+				self.plyFile.write("comment Made with spinscanpy!\n")
+				self.plyFile.write("element vertex " + str(len(self.pointList)) + "\n")
+				self.plyFile.write("property float x\n")
+				self.plyFile.write("property float y\n")
+				self.plyFile.write("property float z\n")
+				#self.plyFile.write("property float nx\n")
+				#self.plyFile.write("property float ny\n")
+				#self.plyFile.write("property float nz\n")
+				if (self.textureScanLoaded):
+					self.plyFile.write("property uchar red\n")
+					self.plyFile.write("property uchar green\n")
+					self.plyFile.write("property uchar blue\n")
+				self.plyFile.write("element face 0\n")
+				self.plyFile.write("property list uchar int vertex_indices\n")
+				self.plyFile.write("end_header\n")
+				# add points here
+				for x in xrange (0, len(self.pointList)):
+					Point = self.pointList[x]
+					#Normal = self.normalList[x]
+					if (self.textureScanLoaded):
+						ColorPoint = self.colorList[x]
+						self.plyFile.write(str(Point[0]) + " " + str(Point[1]) + " " + str(Point[2]) + " " + str(ColorPoint[0]) + " " + str(ColorPoint[1]) + " " + str(ColorPoint[2]) + "\n")
 					else:
-						self.preview3d.glCanvas.rotOneLine(360.0/self.numframes)
-					wx.Yield()
-					self.frame += self.frameSkip
+						self.plyFile.write(str(Point[0]) + " " + str(Point[1]) + " " + str(Point[2]) + "\n")
+
+					#self.plyFile.write(str(Point[0]) + " " + str(Point[1]) + " " + str(Point[2]) + " " + str(Normal[0]) + " " + str(Normal[1]) + " " + str(Normal[2]) + " " + str(ColorPoint[0]) + " " + str(ColorPoint[1]) + " " + str(ColorPoint[2]) + "\n")
+
+				self.plyFile.close()
+
+				print "Writing pcloud file..\n"
+				self.sb.SetStatusText('Writing pcloud file..')
+				self.ctrpnl.progText2.SetLabel('Writing pcloud file')
+				if (len(self.fileprefix) > 0):
+					pclouddata = self.fileprefix + '-' + pcloudFilename
+				else:
+					pclouddata = pcloudFilename
+				pclouddata = outputFolder + pclouddata
+				self.pcloudFile = createWriter(pclouddata)
+				self.pcloudFile.setMode('w')
+				self.pcloudFile.openf()
+				self.pcloudFile.write("[\n")
+
+				# add points here
+				for i in xrange (0, len(self.cloudList)):
+        				self.pcloudFile.write("\t[\n")
+        				Cloud = self.cloudList[i]
+        				for s in xrange (0, len(Cloud)):
+          					CloudPoint = Cloud[s]
+          					self.pcloudFile.write("\t\t[" + str(CloudPoint[0]) + "," + str(CloudPoint[1]) + "," + str(CloudPoint[2]) + "," + str(CloudPoint[3]) + "," + str(CloudPoint[4]) + "," + str(CloudPoint[5]) + "]")
+					 	if (s + 1 == len(Cloud)):
+							self.pcloudFile.write("\n")
+						else:
+							self.pcloudFile.write(",\n")
+        
+        				self.pcloudFile.write("\t]")
+					if (i + 1 == len(self.cloudList)):
+						self.pcloudFile.write("\n")
+					else:
+						self.pcloudFile.write(",\n")
+
+				self.pcloudFile.write("]\n")
+				self.pcloudFile.close()
+				print "Finished!\n"
+				self.sb.SetStatusText('Finished!')
+				self.ctrpnl.progText2.SetLabel('')
+				self.ctrpnl.stpprocButton.Show(False)
+				self.ctrpnl.procButton.Show(True)
+				self.ctrpnl.rbl.Show(False)
+				self.ctrpnl.rbr.Show(False)
+      				self.Processing = False;
+			else:
+				self.processScanFrame()
+				if (self.sSide == 1.0):
+					self.preview3d.glCanvas.rotOneLine(-360.0/self.numframes)
+				else:
+					self.preview3d.glCanvas.rotOneLine(360.0/self.numframes)
+				wx.Yield()
+				self.frame += self.frameSkip
 
 		if (self.textureScanLoaded):
 			self.textureDC = wx.AutoBufferedPaintDC(self.texturepanel)
-			self.textureDC.DrawBitmap(self.textureImage, 0, 0)
+        		self.textureDC.DrawBitmap(self.textureImage, 0, 0)
 			#wx.StaticBitmap(self.texturepanel, -1, self.textureImage, (0,0), (320,240))
 
 		if (self.laserScanLoaded):
 			self.laserDC = wx.AutoBufferedPaintDC(self.laserpanel)
-			self.laserDC.DrawBitmap(self.laserImage, 0, 0)
+        		self.laserDC.DrawBitmap(self.laserImage, 0, 0)
 			#wx.StaticBitmap(self.laserpanel, -1, self.laserImage, (0,0), (320,240))
 
 		if not (self.Preview):
 			if not (self.Processing):
 				self.preview3d.glCanvas.setRotRate(0.5)
 			self.preview3d.glCanvas.drawModel(self.Processing)
-			evt.Skip()
+      		evt.Skip()
 
 	def GetScanSide(self, e):
 		if (self.ctrpnl.rbr.GetValue()):
@@ -466,7 +466,7 @@ class mainWindow(wx.Frame):
 
 	def OnStopScan(self, evt):
 		if self.Recording:
-			print ("Aborting Scan..\n")
+			print "Aborting Scan..\n";
 			self.sb.SetStatusText('Aborting Scan..')
 			self.Recording = False
 			self.recordingType = ""
@@ -488,7 +488,7 @@ class mainWindow(wx.Frame):
 	def OnProcess(self, e):
 		if not self.Processing and self.laserScanLoaded:
 			self.sb.SetStatusText('')
-			self.Preview = False
+    			self.Preview = False;
 			self.pointList = []
 			self.normalList = []
 			self.colorList = []
@@ -496,14 +496,14 @@ class mainWindow(wx.Frame):
 			if (self.appendCloud):
 				self.ctrpnl.cbpcapp.SetValue(False)
 				self.ctrpnl.cbpcapp.Show(False)
-				print ("Getting previous Point Cloud\n")
+				print "Getting previous Point Cloud\n"
 				self.sb.SetStatusText('Getting previous Point Cloud')
 				wx.Yield()
 				ppc = prevPcloud(pcloudFilename)
 				psize = ppc.getSize()
 				clarray = ppc.getarray()
 				self.preview3d.glCanvas.p.setBuffSize((480 * self.numframes) + (480 * psize))
-				print ("Adding previous Point Cloud\n")
+				print "Adding previous Point Cloud\n"
 				self.sb.SetStatusText('Adding previous Point Cloud')
 				self.fillArray(clarray)
 				self.appendCloud = False
@@ -512,76 +512,76 @@ class mainWindow(wx.Frame):
 				self.preview3d.glCanvas.p.setBuffSize(480 * self.numframes)
 			self.sb.SetStatusText('')
 			self.preview3d.glCanvas.resetView()
-			self.Processing = True
+  			self.Processing = True
 			self.ctrpnl.stpprocButton.Show(True)
 			self.ctrpnl.procButton.Show(False)
 
 	def laserScan(self, Side):
 		if not self.Recording and not self.Processing:
-			if (self.serialConnected and self.CamConnect):
-				if (len(self.fileprefix) > 0):
-					laserdata = self.fileprefix + '-' + laserFile
-				else:
-					laserdata = laserFile
-				laserdata = scanFolder + laserdata
-				self.writer = cv.CreateVideoWriter(laserdata, CV_FOURCC('M', 'J', 'P', 'G'), 15, self.fmSize, 1)		
-				if (Side == 0):
-					self.ctrpnl.rbr.SetValue(True)
-					self.sSide = -1.0
-					self.serial.write('5')
-				else:
-					self.ctrpnl.rbl.SetValue(True)
-					self.sSide = 1.0
-					self.serial.write('6')
-
-				self.recordingType = "laser"
-				self.Recording = True;
-				self.ctrpnl.absButton.Show(True)
-				self.ctrpnl.textureButton.Show(False)
-				self.ctrpnl.lslButton.Show(False)
-				self.ctrpnl.lsrButton.Show(False)
-				self.ctrpnl.cbll.Show(False)
-				self.ctrpnl.cblr.Show(False)
-				self.ctrpnl.tsButton.Show(False)
-				self.sb.SetStatusText('Recording...')
+		    if (self.serialConnected and self.CamConnect):
+			if (len(self.fileprefix) > 0):
+				laserdata = self.fileprefix + '-' + laserFile
 			else:
-				print ("ERROR: Serial port not connected or Camera not connected\n")
-				self.sb.SetStatusText('ERROR: Serial port not connected or Camera not connected')
+				laserdata = laserFile
+			laserdata = scanFolder + laserdata
+			self.writer = cv.CreateVideoWriter(laserdata, CV_FOURCC('M', 'J', 'P', 'G'), 15, self.fmSize, 1)		
+      			if (Side == 0):
+				self.ctrpnl.rbr.SetValue(True)
+				self.sSide = -1.0
+        			self.serial.write('5')
+      			else:
+				self.ctrpnl.rbl.SetValue(True)
+				self.sSide = 1.0
+        			self.serial.write('6')
+
+			self.recordingType = "laser"
+			self.Recording = True;
+			self.ctrpnl.absButton.Show(True)
+			self.ctrpnl.textureButton.Show(False)
+			self.ctrpnl.lslButton.Show(False)
+			self.ctrpnl.lsrButton.Show(False)
+			self.ctrpnl.cbll.Show(False)
+			self.ctrpnl.cblr.Show(False)
+			self.ctrpnl.tsButton.Show(False)
+			self.sb.SetStatusText('Recording...')
+		    else:
+			print "ERROR: Serial port not connected or Camera not connected\n"
+			self.sb.SetStatusText('ERROR: Serial port not connected or Camera not connected')
 		else:
-			print ("Already Recording or Currently Processing!!\n")
+			print "Already Recording or Currently Processing!!\n"
 			self.sb.SetStatusText('Already Recording or Currently Processing!!')
 
 
 	def OnTextureScan(self, e):
 		if not self.Recording and not self.Processing:
-			if (self.serialConnected and self.CamConnect):
-				if (len(self.fileprefix) > 0):
-					texturedata = self.fileprefix + '-' + textureFile
-				else:
-					texturedata = textureFile
-				texturedata = scanFolder + texturedata
-				self.writer = cv.CreateVideoWriter(texturedata, CV_FOURCC('M', 'J', 'P', 'G'), 15, self.fmSize, 1)
-				self.serial.write('4')
-
-				self.recordingType = "texture"
-				self.Recording = True
-				self.ctrpnl.absButton.Show(True)
-				self.ctrpnl.textureButton.Show(False)
-				self.ctrpnl.lslButton.Show(False)
-				self.ctrpnl.lsrButton.Show(False)
-				self.ctrpnl.cbll.Show(False)
-				self.ctrpnl.cblr.Show(False)
-				self.ctrpnl.tsButton.Show(False)
-				self.sb.SetStatusText('Recording...')
+		    if (self.serialConnected and self.CamConnect):
+			if (len(self.fileprefix) > 0):
+				texturedata = self.fileprefix + '-' + textureFile
 			else:
-				print ("ERROR: Serial port not connected or Camera not connected\n")
-				self.sb.SetStatusText('ERROR: Serial port not connected or Camera not connected')
+				texturedata = textureFile
+			texturedata = scanFolder + texturedata
+			self.writer = cv.CreateVideoWriter(texturedata, CV_FOURCC('M', 'J', 'P', 'G'), 15, self.fmSize, 1)
+        		self.serial.write('4')
+
+			self.recordingType = "texture"
+			self.Recording = True;
+			self.ctrpnl.absButton.Show(True)
+			self.ctrpnl.textureButton.Show(False)
+			self.ctrpnl.lslButton.Show(False)
+			self.ctrpnl.lsrButton.Show(False)
+			self.ctrpnl.cbll.Show(False)
+			self.ctrpnl.cblr.Show(False)
+			self.ctrpnl.tsButton.Show(False)
+			self.sb.SetStatusText('Recording...')
+		    else:
+			print "ERROR: Serial port not connected or Camera not connected\n"
+			self.sb.SetStatusText('ERROR: Serial port not connected or Camera not connected')
 		else:
-			print ("Already Recording or Currently Processing!!\n")
+			print "Already Recording or Currently Processing!!\n"
 			self.sb.SetStatusText('Already Recording or Currently Processing!!')
 
 	def OnClose(self, e):
-		print ("Closing..\n")
+		print "Closing..\n"
 		self.playTimer.Stop()
 		if (self.serialConnected):
 			self.comTimer.Stop()
@@ -590,7 +590,7 @@ class mainWindow(wx.Frame):
 		self.Destroy()
 
 	def OnQuit(self, e):
-		print ("Quitting..\n")
+		print "Quitting..\n"
 		self.playTimer.Stop()
 		if (self.serialConnected):
 			self.comTimer.Stop()
@@ -626,7 +626,7 @@ class mainWindow(wx.Frame):
 				self.Laser(1, False)
 		else:
 			self.ctrpnl.cblr.SetValue(False)
-			print ("ERROR: Serial port not connected\n")
+			print "ERROR: Serial port not connected\n"
 			self.sb.SetStatusText('ERROR: Serial port not connected')
 
 	def OnLaserLeft(self, e):
@@ -637,14 +637,14 @@ class mainWindow(wx.Frame):
 				self.Laser(0, False)
 		else:
 			self.ctrpnl.cbll.SetValue(False)
-			print ("ERROR: Serial port not connected\n")
+			print "ERROR: Serial port not connected\n"
 			self.sb.SetStatusText('ERROR: Serial port not connected')
 
 	def Laser(self, Side, Enable):
 		if (self.serialConnected) and not (self.Recording):
-			print ("laser: " + str(Side) + " " + str(Enable) + "\n")
+			print "laser: " + str(Side) + " " + str(Enable) + "\n"
 			if (Side == 0):
-				if (Enable):
+      				if (Enable):
         				self.serial.write('1')
 				else:
 					self.serial.write('0')
@@ -658,7 +658,7 @@ class mainWindow(wx.Frame):
 				self.ctrpnl.cbll.SetValue(False)
 			else:
 				self.ctrpnl.cblr.SetValue(False)
-			print ("ERROR: Currently Recording\n")
+			print "ERROR: Currently Recording\n"
 			self.sb.SetStatusText('ERROR: Currently Recording')
 
 	def openTextureScan(self, e):
@@ -685,8 +685,8 @@ class mainWindow(wx.Frame):
 			self.textureImage = self.textureMovie.getScaledBitmap(0.5)
 			self.textureScanLoaded = True
 
-			print ('Num. Frames = ', self.textureMovie.getNframes())
-			print ('Frame Rate = ', self.textureMovie.getFps(), ' frames per sec')
+			print 'Num. Frames = ', self.textureMovie.getNframes()
+			print 'Frame Rate = ', self.textureMovie.getFps(), ' frames per sec'
 			self.sb.SetStatusText('Num. Frames = ' + str(self.textureMovie.getNframes()) + ' + ' + 'Frame Rate = ' + str(self.textureMovie.getFps()) + ' frames per sec')
 
 	def loadLaserScan(self):
@@ -714,8 +714,8 @@ class mainWindow(wx.Frame):
 			self.ctrpnl.rbl.Show(True)
 			self.ctrpnl.rbr.Show(True)
 
-			print ('Num. Frames = ', self.laserMovie.getNframes())
-			print ('Frame Rate = ', self.laserMovie.getFps(), ' frames per sec')
+			print 'Num. Frames = ', self.laserMovie.getNframes()
+			print 'Frame Rate = ', self.laserMovie.getFps(), ' frames per sec'
 			self.sb.SetStatusText('Num. Frames = ' + str(self.laserMovie.getNframes()) + ' , ' + 'Frame Rate = ' + str(self.laserMovie.getFps()) + ' frames per sec')
 
 	def OnStopProcess(self,e):
@@ -743,12 +743,12 @@ class mainWindow(wx.Frame):
 				self.appendCloud = False
 		else:
 			self.ctrpnl.cbpcapp.SetValue(False)
-			print ("ERROR: Currently Processing\n")
+			print "ERROR: Currently Processing\n"
 			self.sb.SetStatusText('ERROR: Currently Processing')
 		
 	def fillArray(self, cparray):
-		for f in range (0, len(cparray)):
-			for r in range (0, len(cparray[f])):
+		for f in xrange (0, len(cparray)):
+			for r in xrange (0, len(cparray[f])):
 				thisColor = [0,0,0]
 				thisPoint = [0,0,0]
 				thisColor[0] = int(cparray[f][r][3])
@@ -802,22 +802,22 @@ class mainWindow(wx.Frame):
 
 			self.frameAngle = float(self.frame) * (360.0 / float(self.numframes))
 
-			for y in range(0,self.imheight):
-				# find the brightest pixel
-				self.brightestValue = 0;
-				self.brightestX = -1;
+			for y in xrange(0,self.imheight):
+    				# find the brightest pixel
+    				self.brightestValue = 0;
+    				self.brightestX = -1;
     
-				for x in range(0,self.imwidth):
+    				for x in xrange(0,self.imwidth):
 					#self.r = self.laserpil.GetRed(x,y)
 					#self.g = self.laserpil.GetGreen(x,y)
 					#self.b = self.laserpil.GetBlue(x,y)
-					#self.pixelValue = self.r + self.g + self.b     
-					#self.pixelBrightness = self.pixelValue
-					self.pixelBrightness = self.laserpil.GetRed(x,y)
+      					#self.pixelValue = self.r + self.g + self.b     
+      					#self.pixelBrightness = self.pixelValue
+      					self.pixelBrightness = self.laserpil.GetRed(x,y)
       
-					if (self.pixelBrightness > self.brightestValue and self.pixelBrightness > self.threshold):
-						self.brightestValue = self.pixelBrightness;
-						self.brightestX = x;
+      					if (self.pixelBrightness > self.brightestValue and self.pixelBrightness > self.threshold):
+        					self.brightestValue = self.pixelBrightness;
+        					self.brightestX = x;
     			
 				#print "brightx: " + str(self.brightestX)
 				#print "value: " + str(self.brightestValue)
@@ -825,8 +825,8 @@ class mainWindow(wx.Frame):
 				self.thisColor = [0,0,0]
 				self.thisPoint = [0,0,0]
 				#self.thisNormal = [0,0,0]
-
-				if (self.brightestX > 0):
+    
+    				if (self.brightestX > 0):
 					if (self.textureScanLoaded):
 						if not (self.textureMovie.done()):
 							self.thisColor[0] = int(self.texturepil.GetRed(self.brightestX,y))
@@ -842,7 +842,7 @@ class mainWindow(wx.Frame):
 
 					self.camAngle = camHFOV * (0.5 - float(self.brightestX) / float(self.imwidth))   
 					self.pointAngle = 180.0 - self.camAngle + laserOffset
-					self.radius = camDistance * math.sin(self.camAngle * degreesToRadians) / math.sin(self.pointAngle * degreesToRadians)
+      					self.radius = camDistance * math.sin(self.camAngle * degreesToRadians) / math.sin(self.pointAngle * degreesToRadians)
     
 					self.pointX = self.radius * math.sin(self.frameAngle * degreesToRadians) * self.sSide
 					self.pointY = self.radius * math.cos(self.frameAngle * degreesToRadians)
@@ -905,20 +905,20 @@ class mainWindow(wx.Frame):
 		self.SerThread.start()
 
 		if (self.serialResponse):
-			print ("RECEIVED: " + self.serialResponse + "\n")
+			print "RECEIVED: " + self.serialResponse + "\n"
 			self.serialResponse = ""
 			if (self.Recording):
-				self.Recording = False
-				self.writer = None
-				sleep(0.050)
-				if (self.recordingType == "laser"):
-					self.loadLaserScan()
+    				self.Recording = False
+    				self.writer = None
+    				sleep(0.050)
+    				if (self.recordingType == "laser"):
+      					self.loadLaserScan()
 					self.Laser(0, False)
-					self.Laser(1, False)
+    					self.Laser(1, False)
 					self.ctrpnl.cbll.SetValue(False)
 					self.ctrpnl.cblr.SetValue(False)
 					self.sb.SetStatusText('Recording Finished' + '\t' + self.sb.GetStatusText())
-				elif (self.recordingType == "texture"):
+    				elif (self.recordingType == "texture"):
 					self.loadTextureScan()
 					self.sb.SetStatusText('Recording Finished')
 				self.ctrpnl.cbll.Show(True)
@@ -941,7 +941,7 @@ class mainWindow(wx.Frame):
 		elif (eid == 40):
 			self.sercfg.setStop(evt.GetString())
 		else:
-			print ("ERROR: Unknown event ID")
+			print "ERROR: Unknown event ID"
 
 	def OnSlider(self, evt):
 		eid = evt.GetId()
@@ -949,16 +949,16 @@ class mainWindow(wx.Frame):
 		if (eid == 5):
 			self.brightness = cobj.GetValue()/100.0
 			if (self.CamConnect):
-				cv.VideoCapture.set(self.capture, cv.CAP_PROP_BRIGHTNESS, self.brightness)
+				cv.VideoCapture.set(self.capture, cv2.CAP_PROP_BRIGHTNESS, self.brightness)
 		elif (eid == 7):
 			self.contrast = cobj.GetValue()/100.0
 			if (self.CamConnect):
-				cv.VideoCapture.set(self.capture, cv.CAP_PROP_CONTRAST, self.contrast)
+				cv.VideoCapture.set(self.capture, cv2.CAP_PROP_CONTRAST, self.contrast)
 
 	def OnSetCfgVal(self, evt):
 		eid = evt.GetId()
 		cobj = evt.GetEventObject()
-		print ('here')
+		print 'here'
 		if (eid == 50):
 			p = re.compile('[a-z,A-Z]+')
 			if p.match(evt.GetString()):
@@ -1010,7 +1010,7 @@ class mainWindow(wx.Frame):
 			else:
 				self.sb.SetStatusText('Threshold must be float numeric chars only')
 		else:
-			print ("ERROR: Unknown event ID")	
+			print "ERROR: Unknown event ID"	
 
 class prevPcloud:
 	def __init__(self, filename):
