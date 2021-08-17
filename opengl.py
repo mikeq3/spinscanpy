@@ -9,7 +9,7 @@ try:
 
 	hasOpenGLlibs = True
 except:
-	print "Failed to find PyOpenGL: http://pyopengl.sourceforge.net/"
+	print ("Failed to find PyOpenGL: http://pyopengl.sourceforge.net/")
 	hasOpenGLlibs = False
 
 def InitGL(window):
@@ -29,7 +29,7 @@ def InitGL(window):
 	#glEnable(GL_CULL_FACE)
 	#glDisable(GL_BLEND)
 	glColorMaterial(GL_FRONT, GL_AMBIENT)
-        glEnable(GL_COLOR_MATERIAL)
+	glEnable(GL_COLOR_MATERIAL)
 
 	glClearColor(0.0, 0.0, 0.0, 0.0)
 

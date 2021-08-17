@@ -1,30 +1,30 @@
 from __future__ import absolute_import
 
-import cv
+import cv2 as cv
 from OpenGL.GL import *
 import numpy as np
 
 class cv2array:
- 	def __init__(self):
+	def __init__(self):
 		self.img = None
 		self.depth2dtype = { 
-			cv.IPL_DEPTH_8U: 'uint8', 
-			cv.IPL_DEPTH_8S: 'int8', 
-			cv.IPL_DEPTH_16U: 'uint16', 
-			cv.IPL_DEPTH_16S: 'int16', 
-			cv.IPL_DEPTH_32S: 'int32', 
-			cv.IPL_DEPTH_32F: 'float32', 
-			cv.IPL_DEPTH_64F: 'float64', 
+			cv.CV_8U: 'uint8', 
+			cv.CV_8S: 'int8', 
+			cv.CV_16U: 'uint16', 
+			cv.CV_16S: 'int16', 
+			cv.CV_32S: 'int32', 
+			cv.CV_32F: 'float32', 
+			cv.CV_64F: 'float64', 
 		} 
 
 		self.depth2GLb = {
-			cv.IPL_DEPTH_8U: GL_UNSIGNED_BYTE, 
-			cv.IPL_DEPTH_8S: GL_BYTE, 
-			cv.IPL_DEPTH_16U: GL_UNSIGNED_SHORT, 
-			cv.IPL_DEPTH_16S: GL_SHORT, 
-			cv.IPL_DEPTH_32S: GL_INT, 
-			cv.IPL_DEPTH_32F: GL_FLOAT, 
-			cv.IPL_DEPTH_64F: False, 
+			cv.CV_8U: GL_UNSIGNED_BYTE, 
+			cv.CV_8S: GL_BYTE, 
+			cv.CV_16U: GL_UNSIGNED_SHORT, 
+			cv.CV_16S: GL_SHORT, 
+			cv.CV_32S: GL_INT, 
+			cv.CV_32F: GL_FLOAT, 
+			cv.CV_64F: False, 
 		} 
 
 		self.nch2format = {

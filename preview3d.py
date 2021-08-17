@@ -17,7 +17,7 @@ try:
 	from OpenGL.GL import *
 	hasOpenGLlibs = True
 except:
-	print "Failed to find PyOpenGL: http://pyopengl.sourceforge.net/"
+	print ("Failed to find PyOpenGL: http://pyopengl.sourceforge.net/")
 	hasOpenGLlibs = False
 
 import opengl
@@ -93,7 +93,7 @@ class PreviewGLCanvas(glcanvas.GLCanvas):
 	
 	def drawModel(self, state):
 		self.state = state
-    		glClear( GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT )
+		glClear( GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT )
 		glLoadIdentity()
 		glTranslate(0.0, 200.0, -500.0)
 		if (not state and self.rate > 0):

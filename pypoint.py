@@ -7,7 +7,7 @@ from ctypes import sizeof, c_float, c_void_p, c_uint
 
 class PyPoint(PreviewGLCanvas):
 	def __init__(self, parent, *args, **kwargs):
-  		self.parent = parent
+		self.parent = parent
 		self.vbuffer = None
 		self.pointdata = None
 		self.numPoints = 0

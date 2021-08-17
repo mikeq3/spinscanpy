@@ -7,7 +7,7 @@ from OpenGL.GL import *
 import serial
 import threading
 import sys
-import pygst
+#import pygst
 import os
 import platform
 import shutil
@@ -27,7 +27,6 @@ from cfgwindow import NewWindow
 #import random
 from preview3d import PreviewGLCanvas
 import numpy as np
-from cv import *
 from optparse import OptionParser
 import json
 #Only import the _core to save import time

@@ -1,19 +1,19 @@
 from __future__ import absolute_import
 
 import wx
-import cv
+import cv2 as cv
 
 class ReadMovie:
 	def __init__(self, moviefile):
 		self.frameImg = None
 		self.vidFile = cv.CaptureFromFile(moviefile)
-		self.nFrames = int(  cv.GetCaptureProperty( self.vidFile, cv.CV_CAP_PROP_FRAME_COUNT ) )
-		self.fps = cv.GetCaptureProperty( self.vidFile, cv.CV_CAP_PROP_FPS )
+		self.nFrames = int(  cv.GetCaptureProperty( self.vidFile, cv.CAP_PROP_FRAME_COUNT ) )
+		self.fps = cv.GetCaptureProperty( self.vidFile, cv.CAP_PROP_FPS )
 
 	def getFrame(self):
 		self.frameImg = cv.QueryFrame(self.vidFile)
 		if not (self.frameImg == False):
-			cv.CvtColor(self.frameImg, self.frameImg, cv.CV_BGR2RGB)
+			cv.CvtColor(self.frameImg, self.frameImg, cv.COLOR_BGR2RGB)
 			self.Img = wx.EmptyImage(self.frameImg.width, self.frameImg.height)
 			self.Img.SetData(self.frameImg.tostring())
 			return True
@@ -52,14 +52,14 @@ class ReadMovie:
 			return False
 
 	def getCurrentFrame(self):
-		self.curFrame = int(  cv.GetCaptureProperty( self.vidFile, cv.CV_CAP_PROP_POS_FRAMES ) )
+		self.curFrame = int(  cv.GetCaptureProperty( self.vidFile, cv.CAP_PROP_POS_FRAMES ) )
 		return self.curFrame
 
 	def done(self):
 		if (self.vidFile == None):
 			return True
 
-		self.nextFrame = int(  cv.GetCaptureProperty( self.vidFile, cv.CV_CAP_PROP_POS_FRAMES ) )
+		self.nextFrame = int(  cv.GetCaptureProperty( self.vidFile, cv.CAP_PROP_POS_FRAMES ) )
 		if (self.nextFrame + 1 > self.nFrames):
 #		if (self.nextFrame + 1 > 10):  # for testing ##########
 			return True
@@ -73,7 +73,7 @@ class ReadMovie:
 		return self.nFrames
 
 	def nextFrame(self):
-		self.nextFrame = int(  cv.GetCaptureProperty( self.vidFile, cv.CV_CAP_PROP_POS_FRAMES ) )
+		self.nextFrame = int(  cv.GetCaptureProperty( self.vidFile, cv.CAP_PROP_POS_FRAMES ) )
 		self.nextFrame += 1
 		return self.nextFrame
 
